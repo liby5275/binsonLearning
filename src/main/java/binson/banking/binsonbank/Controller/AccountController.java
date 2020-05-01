@@ -42,7 +42,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/account/list",method = RequestMethod.GET)
-    public List<AccountDetailsAggregate> getAccountsList(){
+    public List<AccountDetailsAggregate> getAccountsList() {
         return accountService.getAccountsList();
     }
 }
