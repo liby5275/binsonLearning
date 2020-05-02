@@ -31,9 +31,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String getCustomerName(int accountNumber) {
+    public AccountDetailsAggregate getCustomerName(int accountNumber) {
         AccountDetailsAggregate accountDetailsAggregate = accountRepoService.getCustmerDetails(accountNumber);
-        return accountDetailsAggregate.getLastName();
+       return  accountDetailsAggregate;
     }
 
     @Override
@@ -72,5 +72,10 @@ public class AccountServiceImpl implements AccountService {
 
         return accountRepoService.getAccountsList();
 
+    }
+
+    @Override
+    public List<AccountDetailsAggregate> getDeletedAccountList() {
+        return  accountRepoService.getDeletedAccountList();
     }
 }

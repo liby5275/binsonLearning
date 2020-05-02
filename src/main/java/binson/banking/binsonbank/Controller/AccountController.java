@@ -16,33 +16,41 @@ public class AccountController {
 
     @RequestMapping(value = "/account/data", method = RequestMethod.POST)
     public String saveAccountDetails(@RequestBody CreateAccountRequest createAccountRequest) {
-      String result =  accountService.accountSave(createAccountRequest);
-      return result;
+        String result = accountService.accountSave(createAccountRequest);
+        return result;
 
     }
 
     @RequestMapping(value = "/account/data/name/{accountNumber}", method = RequestMethod.GET)
-    public String getCustmerName(@PathVariable int accountNumber) {
+    public AccountDetailsAggregate getCustmerName(@PathVariable int accountNumber) {
 
         return accountService.getCustomerName(accountNumber);
 
     }
 
-    @RequestMapping(value = "/account/data/update/name",method = RequestMethod.PUT)
-    public String updatCustomerName(@RequestBody CreateAccountRequest createAccountRequest){
-       String message =  accountService.updateUserName(createAccountRequest);
+    @RequestMapping(value = "/account/data/update/name", method = RequestMethod.PUT)
+    public String updatCustomerName(@RequestBody CreateAccountRequest createAccountRequest) {
+        String message = accountService.updateUserName(createAccountRequest);
         return message;
     }
 
-    @RequestMapping(value = "/account/data/delete",method = RequestMethod.PUT)
-    public String deleteUserData(@RequestBody CreateAccountRequest createAccountRequest){
-       String message = accountService.deleteUserData(createAccountRequest);
-       return message;
+    @RequestMapping(value = "/account/data/delete", method = RequestMethod.PUT)
+    public String deleteUserData(@RequestBody CreateAccountRequest createAccountRequest) {
+        String message = accountService.deleteUserData(createAccountRequest);
+        return message;
 
     }
 
-    @RequestMapping(value = "/account/list",method = RequestMethod.GET)
+    @RequestMapping(value = "/account/list", method = RequestMethod.GET)
     public List<AccountDetailsAggregate> getAccountsList() {
         return accountService.getAccountsList();
     }
+
+
+    @RequestMapping(value = "/account/deleted/list",method = RequestMethod.GET)
+    public List<AccountDetailsAggregate> getDeletedAccountList(){
+        return  accountService.getDeletedAccountList();
+    }
+
 }
+

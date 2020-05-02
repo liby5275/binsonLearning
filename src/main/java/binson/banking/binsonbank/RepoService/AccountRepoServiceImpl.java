@@ -31,6 +31,9 @@ public class AccountRepoServiceImpl implements AccountRepoService {
     @Value(("${account.list}"))
     public String accountList;
 
+    @Value("${get.deleted.list}")
+    public String deletedList;
+
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -48,7 +51,7 @@ public class AccountRepoServiceImpl implements AccountRepoService {
         mapSqlParameterSource.addValue("balance", createAccountRequest.getAccountBalance());
         mapSqlParameterSource.addValue("isdeleted", "N");
 
-        int result =jdbcTemplate.update(this.saveBankDetails, mapSqlParameterSource);
+        int result = jdbcTemplate.update(this.saveBankDetails, mapSqlParameterSource);
         return result;
 
     }
@@ -68,8 +71,8 @@ public class AccountRepoServiceImpl implements AccountRepoService {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("accountNUmber", accId);
         mapSqlParameterSource.addValue("UpdatedName", name);
-       int columCount = jdbcTemplate.update(this.updatedName, mapSqlParameterSource);
-       return columCount;
+        int columCount = jdbcTemplate.update(this.updatedName, mapSqlParameterSource);
+        return columCount;
 
     }
 
@@ -78,7 +81,7 @@ public class AccountRepoServiceImpl implements AccountRepoService {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("accountNumber", accountNumber);
         int columCount = jdbcTemplate.update(this.deletedData, mapSqlParameterSource);
-       return columCount;
+        return columCount;
 
     }
 
@@ -86,6 +89,13 @@ public class AccountRepoServiceImpl implements AccountRepoService {
     public List<AccountDetailsAggregate> getAccountsList() {
 
         List<AccountDetailsAggregate> accountDetailsAggregates = jdbcTemplate.query(this.accountList,
+                AccountRowMapper.FETCH_ACCOUNT_DETAILS_MAPPER);
+        return accountDetailsAggregates;
+    }
+
+    @Override
+    public List<AccountDetailsAggregate> getDeletedAccountList() {
+        List<AccountDetailsAggregate> accountDetailsAggregates = jdbcTemplate.query(this.deletedList,
                 AccountRowMapper.FETCH_ACCOUNT_DETAILS_MAPPER);
         return accountDetailsAggregates;
     }

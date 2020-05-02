@@ -13,5 +13,6 @@ public interface AccountRepoService {
     public int updateUserName(int accId, String name);
     public int deleteUserData(int accountNumber);
     public List<AccountDetailsAggregate> getAccountsList();
+    public List<AccountDetailsAggregate> getDeletedAccountList();
 
 }
