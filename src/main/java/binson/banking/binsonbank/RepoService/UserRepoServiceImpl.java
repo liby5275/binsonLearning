@@ -32,7 +32,7 @@ public class UserRepoServiceImpl implements UserRepoService {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("Name", createUserRequest.getName());
         mapSqlParameterSource.addValue("Email", createUserRequest.getEmail());
-        mapSqlParameterSource.addValue("PhoneNumber", createUserRequest.getPhone());
+        mapSqlParameterSource.addValue("PhoneNumber", createUserRequest.getPhoneNumber());
         mapSqlParameterSource.addValue("AccountId", createUserRequest.getAccountNumber());
         mapSqlParameterSource.addValue("Country", createUserRequest.getCountry());
         mapSqlParameterSource.addValue("Password", createUserRequest.getPassword());
