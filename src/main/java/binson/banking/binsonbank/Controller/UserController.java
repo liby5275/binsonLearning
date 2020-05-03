@@ -17,14 +17,14 @@ public class UserController {
         ResponseMessage responseMessage = userService.userDataSave(createUserRequest);
         return responseMessage;
     }
-
-    @RequestMapping(value = "/user/details/{accountNumber}", method = RequestMethod.GET)
+", method = RequestMethod.GET)
     public UserDetailsAggregate getUserDetails(@PathVariable int accountNumber) {
         UserDetailsAggregate userDetailsAggregate = userService.getUserDetails(accountNumber);
         return userDetailsAggregate;
 
     }
 
+    @RequestMapping(value = "/user/details/{accountNumber}
     @RequestMapping(value = "/user/password/change", method = RequestMethod.PUT)
     public ResponseMessage changePswd(@RequestBody CreateUserRequest createUserRequest) {
         ResponseMessage responseMessage = userService.changePswd(createUserRequest);

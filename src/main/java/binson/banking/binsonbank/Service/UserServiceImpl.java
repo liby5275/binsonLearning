@@ -25,7 +25,7 @@ public class UserServiceImpl implements  UserService{
 
         }
         else{
-            responseMessage.setResponseMessage("something went wrong");
+            responseMessage.setResponseMessage("successfully updated");
 
         }
         return  responseMessage;
