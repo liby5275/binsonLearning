@@ -2,6 +2,7 @@ package binson.banking.binsonbank.Service;
 
 import binson.banking.binsonbank.RepoService.UserRepoService;
 import binson.banking.binsonbank.Request.CreateUserRequest;
+import binson.banking.binsonbank.Response.ResponseMessage;
 import binson.banking.binsonbank.aggregate.UserDetailsAggregate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,20 +10,25 @@ import sun.java2d.pipe.SpanShapeRenderer;
 
 @Service
 public class UserServiceImpl implements  UserService{
+
+    ResponseMessage responseMessage = new ResponseMessage();
     String message="";
     @Autowired
     private UserRepoService userRepoService;
 
     @Override
-    public String userDataSave(CreateUserRequest createUserRequest) {
+    public ResponseMessage userDataSave(CreateUserRequest createUserRequest) {
        int rowCount= userRepoService.userDataSave(createUserRequest);
+
         if(rowCount<1){
-            message="something went wrong";
+            responseMessage.setResponseMessage("something went wrong");
+
         }
         else{
-            message = "updated successfully";
+            responseMessage.setResponseMessage("something went wrong");
+
         }
-        return  message;
+        return  responseMessage;
     }
 
     @Override
@@ -32,17 +38,21 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public String changePswd(CreateUserRequest createUserRequest) {
+    public ResponseMessage changePswd(CreateUserRequest createUserRequest) {
         int accountNumber = createUserRequest.getAccountNumber();
         String password = createUserRequest.getPassword();
+
         int rowCount= userRepoService.changePswd(accountNumber, password);
         if(rowCount<1){
-            message="something went wrong";
+
+
+            responseMessage.setResponseMessage("something went wrong");
         }
         else{
-            message = "password updated successfully";
+            responseMessage.setResponseMessage(" password updated successfully");
+
         }
-        return  message;
+        return  responseMessage;
     }
 
 

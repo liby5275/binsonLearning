@@ -77,7 +77,7 @@ public class AccountRepoServiceImpl implements AccountRepoService {
     }
 
     @Override
-    public int deleteUserData(int accountNumber) {
+    public intdeleteUserData(int accountNumber) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("accountNumber", accountNumber);
         int columCount = jdbcTemplate.update(this.deletedData, mapSqlParameterSource);

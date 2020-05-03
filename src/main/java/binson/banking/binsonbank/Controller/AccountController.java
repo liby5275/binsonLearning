@@ -1,6 +1,7 @@
 package binson.banking.binsonbank.Controller;
 
 import binson.banking.binsonbank.Request.CreateAccountRequest;
+import binson.banking.binsonbank.Response.ResponseMessage;
 import binson.banking.binsonbank.Service.AccountService;
 import binson.banking.binsonbank.aggregate.AccountDetailsAggregate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ public class AccountController {
     private AccountService accountService;
 
     @RequestMapping(value = "/account/data", method = RequestMethod.POST)
-    public String saveAccountDetails(@RequestBody CreateAccountRequest createAccountRequest) {
-        String result = accountService.accountSave(createAccountRequest);
-        return result;
+    public ResponseMessage saveAccountDetails(@RequestBody CreateAccountRequest createAccountRequest) {
+        ResponseMessage responseMessage = accountService.accountSave(createAccountRequest);
+        return responseMessage;
 
     }
 
@@ -29,15 +30,15 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/account/data/update/name", method = RequestMethod.PUT)
-    public String updatCustomerName(@RequestBody CreateAccountRequest createAccountRequest) {
-        String message = accountService.updateUserName(createAccountRequest);
-        return message;
+    public ResponseMessage updatCustomerName(@RequestBody CreateAccountRequest createAccountRequest) {
+        ResponseMessage responseMessage = accountService.updateUserName(createAccountRequest);
+        return responseMessage;
     }
 
     @RequestMapping(value = "/account/data/delete", method = RequestMethod.PUT)
-    public String deleteUserData(@RequestBody CreateAccountRequest createAccountRequest) {
-        String message = accountService.deleteUserData(createAccountRequest);
-        return message;
+    public ResponseMessage deleteUserData(@RequestBody CreateAccountRequest createAccountRequest) {
+        ResponseMessage responseMessage = accountService.deleteUserData(createAccountRequest);
+        return responseMessage;
 
     }
 
