@@ -40,4 +40,9 @@ public class UserController {
         return responseMessage;
 
     }
+    @RequestMapping(value = "/user/login/{accountNumber}/{password}",method = RequestMethod.GET)
+    public ResponseMessage userLogin(@PathVariable int accountNumber,@PathVariable String password){
+       ResponseMessage responseMessage = userService.userLogin(accountNumber,password);
+       return  responseMessage;
+    }
 }

@@ -8,4 +8,5 @@ public interface UserService {
     public ResponseMessage userDataSave(CreateUserRequest createUserRequest);
     public UserDetailsAggregate getUserDetails( int accountNumber);
     public ResponseMessage changePswd ( CreateUserRequest createUserRequest);
+    public ResponseMessage userLogin ( int accountNumber,String password);
 }

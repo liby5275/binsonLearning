@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
         responseMessage.setToken(token);
 
-        int rowCount = userRepoService.userDataSave(createUserRequest,token,customer_id);
+        int rowCount = userRepoService.userDataSave(createUserRequest, token, customer_id);
 
         if (rowCount < 1) {
             responseMessage.setResponseMessage("something went wrong");
@@ -72,6 +72,30 @@ public class UserServiceImpl implements UserService {
 
         }
         return responseMessage;
+    }
+
+    @Override
+    public ResponseMessage userLogin(int accountNumber, String password) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        UserDetailsAggregate userDetailsAggregate = userRepoService.getUserDetails(accountNumber);
+        if (userDetailsAggregate != null) {
+            if (userDetailsAggregate.getPassword().equals(password)) {
+                String token = tokenService.generateToken(userDetailsAggregate.getCustomerId(),
+                        userDetailsAggregate.getPassword());
+                responseMessage.setToken(token);
+                responseMessage.setResponseMessage("success");
+
+            }
+            else{
+                responseMessage.setResponseMessage("in correct password");
+            }
+
+        }
+        else{
+            responseMessage.setResponseMessage("invalid account number");
+        }
+        return  responseMessage;
+
     }
 
     private boolean isThisRequestValid(int accountNumber) {

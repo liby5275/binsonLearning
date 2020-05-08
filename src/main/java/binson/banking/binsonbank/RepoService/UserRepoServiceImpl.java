@@ -6,6 +6,7 @@ import binson.banking.binsonbank.factory.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -54,8 +55,14 @@ public class UserRepoServiceImpl implements UserRepoService {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("accountNumber", accountNumber);
-        UserDetailsAggregate userDetailsAggregate = jdbcTemplate.queryForObject
-                (this.getUSerDetails, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+        UserDetailsAggregate userDetailsAggregate = new UserDetailsAggregate();
+        try{
+             userDetailsAggregate = jdbcTemplate.queryForObject
+                    (this.getUSerDetails, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+        } catch(EmptyResultDataAccessException e){
+            userDetailsAggregate = null;
+        }
+
         return userDetailsAggregate;
 
     }
@@ -73,8 +80,15 @@ public class UserRepoServiceImpl implements UserRepoService {
     public UserDetailsAggregate getUserDetailsByCustomerId(String custId) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("custemerId", custId);
-     UserDetailsAggregate userDetailsAggregate=   jdbcTemplate.queryForObject
-                (this.userDetailsByCustId, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+        UserDetailsAggregate userDetailsAggregate = new UserDetailsAggregate();
+
+        try{
+             userDetailsAggregate=   jdbcTemplate.queryForObject
+                    (this.userDetailsByCustId, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+        } catch(EmptyResultDataAccessException e){
+            userDetailsAggregate = null;
+        }
+
      return  userDetailsAggregate;
     }
 
