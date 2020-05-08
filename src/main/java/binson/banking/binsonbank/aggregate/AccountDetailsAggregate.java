@@ -47,4 +47,5 @@ public class AccountDetailsAggregate {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
 }

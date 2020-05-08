@@ -6,55 +6,98 @@ import binson.banking.binsonbank.Response.ResponseMessage;
 import binson.banking.binsonbank.aggregate.UserDetailsAggregate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.java2d.pipe.SpanShapeRenderer;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
+
 
 @Service
-public class UserServiceImpl implements  UserService{
+public class UserServiceImpl implements UserService {
 
-    ResponseMessage responseMessage = new ResponseMessage();
-    String message="";
+
     @Autowired
     private UserRepoService userRepoService;
 
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+
     @Override
     public ResponseMessage userDataSave(CreateUserRequest createUserRequest) {
-       int rowCount= userRepoService.userDataSave(createUserRequest);
+        ResponseMessage responseMessage = new ResponseMessage();
+        String customer_id = UUID.randomUUID().toString();
+        String token = tokenService.generateToken(customer_id, createUserRequest.getPassword());
 
-        if(rowCount<1){
+        responseMessage.setToken(token);
+
+        int rowCount = userRepoService.userDataSave(createUserRequest,token,customer_id);
+
+        if (rowCount < 1) {
             responseMessage.setResponseMessage("something went wrong");
 
-        }
-        else{
+        } else {
             responseMessage.setResponseMessage("successfully updated");
-
         }
-        return  responseMessage;
+
+
+        return responseMessage;
     }
 
     @Override
     public UserDetailsAggregate getUserDetails(int accountNumber) {
-    UserDetailsAggregate userDetailsAggregate=  userRepoService.getUserDetails(accountNumber);
-    return userDetailsAggregate;
+        if (isThisRequestValid(accountNumber)) {
+            UserDetailsAggregate userDetailsAggregate = userRepoService.getUserDetails(accountNumber);
+            return userDetailsAggregate;
+        } else {
+            return null;
+        }
+
     }
 
     @Override
     public ResponseMessage changePswd(CreateUserRequest createUserRequest) {
         int accountNumber = createUserRequest.getAccountNumber();
         String password = createUserRequest.getPassword();
-
-        int rowCount= userRepoService.changePswd(accountNumber, password);
-        if(rowCount<1){
+        ResponseMessage responseMessage = new ResponseMessage();
+        int rowCount = userRepoService.changePswd(accountNumber, password);
+        if (rowCount < 1) {
 
 
             responseMessage.setResponseMessage("something went wrong");
-        }
-        else{
+        } else {
             responseMessage.setResponseMessage(" password updated successfully");
 
         }
-        return  responseMessage;
+        return responseMessage;
     }
 
+    private boolean isThisRequestValid(int accountNumber) {
+
+        boolean isValidRequest = false;
+
+        //if no token provided. return false
+        String token = httpServletRequest.getHeader("Authorization");
+        if (null == token || token.isEmpty()) {
+            return isValidRequest;
+        }
+
+        // Decrypt cusomterId from token
+        String customerIdFromToken = tokenService.getcustomteridfromtoken(token);
+
+        //check if this customer ID exist or not? ID exist, fetch the customer details
+        UserDetailsAggregate userDetailsAggregate = userRepoService.getUserDetailsByCustomerId(customerIdFromToken);
+
+        if (null != userDetailsAggregate && 0 != userDetailsAggregate.getAccountNumber()) {
+            // this is a valid account number
+            if (accountNumber == Integer.valueOf(userDetailsAggregate.getAccountNumber())) {
+                isValidRequest = true;
+            }
+        }
+        return isValidRequest;
+    }
 
 
 }

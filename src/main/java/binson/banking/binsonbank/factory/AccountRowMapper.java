@@ -12,6 +12,7 @@ public class AccountRowMapper {
         accountDetailsAggregate.setLastName(res.getString("lastName"));
         accountDetailsAggregate.setDeleted(res.getString("isDeleted").equals("Y"));
         accountDetailsAggregate.setAccountBalance(res.getInt("accntBalance"));
+
         return accountDetailsAggregate;
     };
 }

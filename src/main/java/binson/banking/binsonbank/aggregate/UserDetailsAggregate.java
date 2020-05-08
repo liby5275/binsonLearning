@@ -1,6 +1,8 @@
 package binson.banking.binsonbank.aggregate;
 
+
 public class UserDetailsAggregate {
+    private String customerId;
     private String name;
     private String email;
     private String phoneNumber;
@@ -55,6 +57,13 @@ public class UserDetailsAggregate {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
 

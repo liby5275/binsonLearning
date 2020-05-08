@@ -26,8 +26,11 @@ public class UserRepoServiceImpl implements UserRepoService {
     @Value("${set.password}")
     public String updatedPswd;
 
+    @Value(("${get.user.details.custometId}"))
+    public String userDetailsByCustId;
+
     @Override
-    public int userDataSave(CreateUserRequest createUserRequest) {
+    public int userDataSave(CreateUserRequest createUserRequest, String token, String customer_id) {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("Name", createUserRequest.getName());
@@ -36,10 +39,12 @@ public class UserRepoServiceImpl implements UserRepoService {
         mapSqlParameterSource.addValue("AccountId", createUserRequest.getAccountNumber());
         mapSqlParameterSource.addValue("Country", createUserRequest.getCountry());
         mapSqlParameterSource.addValue("Password", createUserRequest.getPassword());
+        mapSqlParameterSource.addValue("token", token);
+        mapSqlParameterSource.addValue("customer_id", customer_id);
 
         System.out.println(createUserRequest.getEmail());
         int rowCount = jdbcTemplate.update(this.userDataSave, mapSqlParameterSource);
-        return  rowCount;
+        return rowCount;
 
 
     }
@@ -47,20 +52,31 @@ public class UserRepoServiceImpl implements UserRepoService {
     @Override
     public UserDetailsAggregate getUserDetails(int accountNumber) {
 
-        MapSqlParameterSource mapSqlParameterSource= new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("accountNumber",accountNumber);
-       UserDetailsAggregate userDetailsAggregate = jdbcTemplate.queryForObject
-               (this.getUSerDetails,mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
-       return userDetailsAggregate;
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("accountNumber", accountNumber);
+        UserDetailsAggregate userDetailsAggregate = jdbcTemplate.queryForObject
+                (this.getUSerDetails, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+        return userDetailsAggregate;
 
     }
 
     @Override
-    public int changePswd(int accountNumber,String password) {
+    public int changePswd(int accountNumber, String password) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("accountNumber",accountNumber);
-        mapSqlParameterSource.addValue("password",password);
-        int rowCount = jdbcTemplate.update(this.updatedPswd,mapSqlParameterSource);
+        mapSqlParameterSource.addValue("accountNumber", accountNumber);
+        mapSqlParameterSource.addValue("password", password);
+        int rowCount = jdbcTemplate.update(this.updatedPswd, mapSqlParameterSource);
         return rowCount;
     }
+
+    @Override
+    public UserDetailsAggregate getUserDetailsByCustomerId(String custId) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("custemerId", custId);
+     UserDetailsAggregate userDetailsAggregate=   jdbcTemplate.queryForObject
+                (this.userDetailsByCustId, mapSqlParameterSource, UserRowMapper.FETCH_USER_DETAILS_MAPPER);
+     return  userDetailsAggregate;
+    }
+
+
 }
